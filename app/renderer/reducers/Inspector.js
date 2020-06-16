@@ -27,7 +27,7 @@ const INITIAL_STATE = {
   actionFramework: DEFAULT_FRAMEWORK,
   sessionDetails: {},
   isLocatorTestModalVisible: false,
-  locatorTestStrategy: 'id',
+  locatorTestStrategy: 'accessibility id',
   locatorTestValue: '',
   isSearchingForElements: false,
   assignedVarCache: {},
