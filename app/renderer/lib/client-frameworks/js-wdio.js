@@ -25,7 +25,7 @@ class JsWdIoFramework extends Framework {
 
 const wdio = require('webdriverio');
 const caps = ${caps};
-const driver = wdio.remote({
+const driver = await wdio.remote({
   protocol: ${proto},
   host: ${host},
   port: ${this.port},
@@ -55,9 +55,9 @@ ${this.indent(this.chainifyCode(code), 2)}
       default: throw new Error(`Can't handle strategy ${strategy}`);
     }
     if (isArray) {
-      return `let ${localVar} = driver.elements(${JSON.stringify(locator)});`;
+      return `let ${localVar} = await driver.$$(${JSON.stringify(locator)});`;
     } else {
-      return `let ${localVar} = driver.element(${JSON.stringify(locator)});`;
+      return `let ${localVar} = await driver.$(${JSON.stringify(locator)});`;
     }
   }
 
@@ -74,7 +74,7 @@ ${this.indent(this.chainifyCode(code), 2)}
   }
 
   codeFor_back () {
-    return `driver.back();`;
+    return `await driver.back();`;
   }
 
   codeFor_tap (varNameIgnore, varIndexIgnore, x, y) {
@@ -82,8 +82,9 @@ ${this.indent(this.chainifyCode(code), 2)}
   }
 
   codeFor_swipe (varNameIgnore, varIndexIgnore, x1, y1, x2, y2) {
-    return `driver.touchAction([
+    return `await driver.touchAction([
   {action: 'press', x: ${x1}, y: ${y1}},
+  {action: 'wait', ms: 1000 },
   {action: 'moveTo', x: ${x2}, y: ${y2}},
   'release'
 ]);`;
@@ -111,7 +112,7 @@ ${this.indent(this.chainifyCode(code), 2)}
   }
 
   codeFor_backgroundApp (varNameIgnore, varIndexIgnore, timeout) {
-    return `await driver.background(${timeout});`;
+    return `await driver.backdground(${timeout});`;
   }
 
   codeFor_closeApp () {
@@ -215,7 +216,7 @@ ${this.indent(this.chainifyCode(code), 2)}
   }
 
   codeFor_rotateDevice (varNameIgnore, varIndexIgnore, x, y, radius, rotation, touchCount, duration) {
-    return `driver.rotate(${x}, ${y}, ${radius}, ${rotation}, ${touchCount}, ${duration});`;
+    return `await driver.rotate(${x}, ${y}, ${radius}, ${rotation}, ${touchCount}, ${duration});`;
   }
 
   codeFor_getPerformanceData () {
@@ -271,7 +272,7 @@ ${this.indent(this.chainifyCode(code), 2)}
   }
 
   codeFor_setOrientation (varNameIgnore, varIndexIgnore, orientation) {
-    return `driver.orientation("${orientation}");`;
+    return `await driver.orientation("${orientation}");`;
   }
 
   codeFor_getGeoLocation () {
@@ -301,36 +302,36 @@ ${this.indent(this.chainifyCode(code), 2)}
   // Web
 
   codeFor_get (url) {
-    return `driver.navigateTo('${url}');`;
+    return `await driver.navigateTo('${url}');`;
   }
 
   codeFor_url () {
-    return `let current_url = driver.getUrl();`;
+    return `let current_url = await driver.getUrl();`;
   }
 
   codeFor_forward () {
-    return `driver.forward();`;
+    return `await driver.forward();`;
   }
 
   codeFor_refresh () {
-    return `driver.refresh();`;
+    return `await driver.refresh();`;
   }
 
   // Context
 
   codeFor_currentContext () {
-    return `let context = driver.getContext();`;
+    return `let context = await driver.getContext();`;
   }
 
   codeFor_contexts () {
-    return `driver.getContexts();`;
+    return `await driver.getContexts();`;
   }
 
   codeFor_context (name) {
-    return `driver.switchContext('${name}');`;
+    return `await driver.switchContext('${name}');`;
   }
 }
 
-JsWdIoFramework.readableName = 'JS - Webdriver.io';
+JsWdIoFramework.readableName = 'JS - Webdriver.io v6';
 
 export default JsWdIoFramework;
